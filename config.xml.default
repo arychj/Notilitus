@@ -1,0 +1,84 @@
+<config>
+	<debug enabled="True">
+		<haltonerror>False</haltonerror>
+		<waitaftercreate>False</waitaftercreate>
+	</debug>
+	<parsing>
+		<prefetch>True</prefetch>
+	</parsing>
+	<simplify service="readability">
+		<url>http://www.readability.com/api/content/v1/parser</url>
+		<key></key>
+		<validextensions>
+			<extension>htm</extension>
+			<extension>html</extension>
+			<extension>txt</extension>
+			<extension></extension>
+		</validextensions>
+	</simplify>
+	<tagging service="yahoo">
+		<service name="yahoo">
+			<url>http://query.yahooapis.com/v1/public/yql</url>
+			<key></key>
+			<secret></secret>
+		</service>
+		<service name="opencalais">
+			<url>http://api.opencalais.com/tag/rs/enrich</url>
+			<key></key>
+		</service>
+	</tagging>
+	<evernote service="api" sandbox="True">
+		<token></token>
+		<token type="sandbox"></token>
+		<key></key>
+		<secret></secret>
+		<email>
+			<to></to>
+			<from></from>
+		</email>
+		<notebook>Notes</notebook>
+		<tags>True</tags>
+		<sanitize applytemplate="True">
+			<template>note.tpl</template>
+			<attributes>
+				<empty>((?:href)\s*=\s*["'].*?["'])</empty>
+				<prohibited>((?:id|class|onclick|ondblclick|on|accesskey|data|dynsrc|tabindex)\s*=\s*".*?")</prohibited>
+			</attributes>
+			<elements><![CDATA[<(applet|base|iframe).*</\1>]]></elements>
+			<defaulttitle>Notilitus Note</defaulttitle>
+			<preserve>
+				<pattern><![CDATA[(<{0}.*?>.*?</{0}>|<{0}.*?/>)]]></pattern>
+				<elements>en-media</elements>
+			</preserve>
+		</sanitize>
+		<embed>
+			<images><![CDATA[(<img.*?src\s*=\s*"(.*?)".*?/?>)]]></images>
+		</embed>
+		<validresources>
+			<resource>jpg</resource>
+			<resource>jpeg</resource>
+			<resource>gif</resource>
+			<resource>png</resource>
+			<resource>pdf</resource>
+		</validresources>
+	</evernote>
+	<email service="gmail">
+		<smtphost port="587">smtp.gmail.com</smtphost>
+		<imaphost>imap.gmail.com</imaphost>
+		<credentials>
+			<username></username>
+			<password></password>
+		</credentials>
+		<incoming>
+			<user>^([^@]+)</user>
+			<folder>inbox</folder>
+			<linkregex>^([^\s\r\n]*)</linkregex>
+			<url><![CDATA[(http[s]?\://[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(?::[a-zA-Z0-9]*)?/?(?:[a-zA-Z0-9\-\._\?\,\'/\\\+&amp;%\$#\=~])*)]]></url>
+			<deletecompleted>False</deletecompleted>
+			<markasread>False</markasread>
+		</incoming>
+		<safeemail>[^\x00-\x7F]</safeemail>
+		<title>^([^#@]+)</title>
+		<tags>#([^#@]+)</tags>
+	</email>
+</config>
